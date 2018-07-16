@@ -1,13 +1,14 @@
-user_mo_ali:
+{%for user, data in pillar.get('admin_users', {}).items()%}
+user_{{ user }}:
  user.present:
-  - fullname: Mo Ali
-  - name: mo.ali
-  - uid: 10000
-  - home: /home/mo.ali
-  - shell: /bin/bash
+  - name: {{ user }}
+  - fullname: {{ data['fullname'] }}
+  - shell: {{ data['shell'] }}
+  - home: {{ data['home'] }}
 
-sshkey_mo_ali:
+ssh_key_{{ user }}:
  ssh_auth.present:
-  - name: mo.ali
-  - user: mo.ali
-  - source: salt://users/keys/mo_ali.pub
+  - name: {{ data['ssh_key'] }}
+  - user: {{ user }}
+
+{% endfor %}
